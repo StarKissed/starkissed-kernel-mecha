@@ -79,3 +79,15 @@ GTAGS
 *.orig
 *~
 \#*#
+
+arch/arm/boot/compressed/lib1funcs.S
+arch/arm/boot/compressed/piggy.gzip
+arch/arm/boot/compressed/vmlinux
+
+mkboot.aosp/boot.img
+mkboot.aosp/zImage
+
+zip.aosp/boot.img
+*.zip
+
+include/config/tristate.conf
