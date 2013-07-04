@@ -1,6 +1,6 @@
 /*
    BlueZ - Bluetooth protocol stack for Linux
-   Copyright (c) 2000-2001, 2010-2012 Code Aurora Forum.  All rights reserved.
+   Copyright (C) 2000-2001 Qualcomm Incorporated
    Copyright (C) 2009-2010 Gustavo F. Padovan <gustavo@padovan.org>
    Copyright (C) 2010 Google Inc.
 
@@ -2796,6 +2796,9 @@ static struct sk_buff *l2cap_build_cmd(struct l2cap_conn *conn,
 
 	BT_DBG("conn %p, code 0x%2.2x, ident 0x%2.2x, len %d",
 			conn, code, ident, dlen);
+
+	if (conn->mtu < L2CAP_HDR_SIZE + L2CAP_CMD_HDR_SIZE)
+		return NULL;
 
 	len = L2CAP_HDR_SIZE + L2CAP_CMD_HDR_SIZE + dlen;
 	count = min_t(unsigned int, mtu, len);
