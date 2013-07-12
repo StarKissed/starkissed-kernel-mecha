@@ -738,7 +738,7 @@ void boostpulse_relay(void)
 	{
 		if (dbs_tuners_ins.boost_gpu > 0)
 		{
-			int bpc = (dbs_tuners_ins.boost_hold_cycles / 2);
+			//int bpc = (dbs_tuners_ins.boost_hold_cycles / 2);
 			//if (dbs_tuners_ins.boost_hold_cycles > 0)
 				//boost_the_gpu(dbs_tuners_ins.boost_gpu, bpc);
 			//else
@@ -758,7 +758,7 @@ void boostpulse_relay(void)
 	{
 		if (dbs_tuners_ins.boost_gpu > 0)
 		{
-			int bpc = (dbs_tuners_ins.boost_hold_cycles / 2);
+			//int bpc = (dbs_tuners_ins.boost_hold_cycles / 2);
 			//if (dbs_tuners_ins.boost_hold_cycles > 0)
 				//boost_the_gpu(dbs_tuners_ins.boost_gpu, bpc);
 			//else
