@@ -14,7 +14,8 @@ MECHAREPO=/Volumes/android/github-aosp_source/android_device_htc_mecha
 ICSREPO=/Volumes/android/github-aosp_source/android_system_core
 MSMREPO=/Volumes/android/github-aosp_source/android_device_htc_msm7x30-common
 zipfile=$HANDLE"_baseKernel_184Mhz.zip"
-TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
+#TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
+TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 
 CPU_JOB_NUM=8
 
