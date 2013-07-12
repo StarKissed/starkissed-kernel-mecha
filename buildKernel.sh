@@ -7,13 +7,13 @@
 PROPER=`echo $2 | sed 's/\([a-z]\)\([a-zA-Z0-9]*\)/\u\1\2/g'`
 
 HANDLE=TwistedZero
-KERNELSPEC=/Volumes/android/android_kernel_htc_mecha
+KERNELSPEC=/Volumes/android/mecha-ics-mr-3.0.16
 KERNELREPO=/Users/TwistedZero/Public/Dropbox/TwistedServer/Playground/kernels
 EXTRASREPO=/Volumes/android/Playground-Ext_Pack/optional/kernel
 MECHAREPO=/Volumes/android/github-aosp_source/android_device_htc_mecha
 ICSREPO=/Volumes/android/github-aosp_source/android_system_core
 MSMREPO=/Volumes/android/github-aosp_source/android_device_htc_msm7x30-common
-zipfile=$HANDLE"_baseKernel_184Mhz.zip"
+zipfile=$HANDLE"_leanKernel_184Mhz.zip"
 #TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
 TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 
@@ -81,11 +81,11 @@ cp -R boot.img $EXTRASREPO
 
 else
 
-cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+#cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+#cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+#cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+#cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+#cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
 
 if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
 
@@ -122,7 +122,7 @@ cd mkboot.aosp
 ./img.sh
 
 echo "building kernel package"
-cp -R boot.img ../zip.aosp
+cp -R boot.img ../zip.aosp/kernel
 cd ../zip.aosp
 rm *.zip
 zip -r $zipfile *

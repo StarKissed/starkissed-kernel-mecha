@@ -91,3 +91,4 @@ zip.aosp/boot.img
 *.zip
 
 include/config/tristate.conf
+zip.aosp/kernel/boot.img
