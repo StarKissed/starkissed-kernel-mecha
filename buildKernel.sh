@@ -22,6 +22,9 @@ CPU_JOB_NUM=8
 cp -R config/$2_config .config
 
 make clean -j$CPU_JOB_NUM
+if [ -e arch/arm/boot/zImage ]; then
+    rm arch/arm/boot/zImage
+fi
 
 make -j$CPU_JOB_NUM ARCH=arm CROSS_COMPILE=$TOOLCHAIN_PREFIX
 
