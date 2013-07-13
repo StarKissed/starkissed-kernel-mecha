@@ -6,7 +6,6 @@
 /dev/codec_aic3254      0660    system      audio
 /dev/pmem_audio         0660    system      audio
 /dev/pmem_smipool*      0660    system      audio
-/dev/gemini*	        0660    system      audio
 /dev/tpa2051d3          0660    system      audio
 /dev/pmem_adsp*         0660    system      audio
 /dev/adsp/*             0660    system      audio
@@ -14,19 +13,23 @@
 /dev/htc-acoustic       0660    system      audio
 /dev/msm_amrnb*         0660    system      audio
 /dev/msm_aac*           0660    system      audio
+/dev/msm_mvs            0660    system      audio
 
 #bluetooth
 /dev/ttyHS0             0660    bluetooth   bluetooth
 
 #camera
-/dev/gemini0            0660    system      camera
+/dev/gemini0            0660    system      system
 /dev/msm_camera/*       0660    system      camera
 /dev/pmem_camera*       0660    system      camera
 
 #graphics
 /dev/graphics/fb*       0666    system      graphics
 /dev/msm_rotator        0660    system      graphics
-/dev/msm_vidc*          0660    system      graphics
+/dev/msm_vidc_dec       0660    system      audio
+/dev/msm_vidc_dec_sec   0660    system      audio
+/dev/msm_vidc_enc       0660    system      audio
+/dev/msm_vidc_reg       0660    system      audio
 /dev/kgsl-3d0           0666    root        root
 /dev/kgsl-2d0           0666    root        root
 /dev/kgsl-2d1           0666    root        root
@@ -45,6 +48,8 @@
 /dev/qmi0               0640    radio       radio
 /dev/qmi1               0640    radio       radio
 /dev/qmi2               0640    radio       radio
+/dev/ppp                0660    radio       vpn
+/dev/tun                0660    system      vpn
 
 #sensors
 /dev/akm8975_daemon     0640    compass     system

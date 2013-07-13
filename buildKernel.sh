@@ -81,11 +81,11 @@ cp -R boot.img $EXTRASREPO
 
 else
 
-#cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-#cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-#cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-#cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-#cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
 
 if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
 
