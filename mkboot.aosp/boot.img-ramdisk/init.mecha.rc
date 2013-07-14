@@ -10,10 +10,10 @@ on early-fs
     mkdir /data 0771 system system
     mkdir /cache 0770 system cache
     mkdir /devlog 0700 root root
-    mount ext4 /dev/block/mmcblk0p25 /system wait ro noatime nodiratime nouser_xattr
-    mount ext4 /dev/block/mmcblk0p26 /data wait noatime nodiratime nosuid nodev noauto_da_alloc nouser_xattr
-    mount ext4 /dev/block/mmcblk0p27 /cache wait noatime nodiratime nosuid nodev nouser_xattr
-    mount ext4 /dev/block/mmcblk0p28 /devlog wait noatime nodiratime nosuid nodev nouser_xattr
+    mount ext4 /dev/block/mmcblk0p25 /system wait ro noatime nodiratime barrier=0 nouser_xattr
+    mount ext4 /dev/block/mmcblk0p26 /data wait noatime nodiratime nosuid nodev barrier=0 noauto_da_alloc nouser_xattr
+    mount ext4 /dev/block/mmcblk0p27 /cache wait noatime nodiratime nosuid nodev barrier=0 nouser_xattr
+    mount ext4 /dev/block/mmcblk0p28 /devlog wait noatime nodiratime nosuid nodev barrier=0 nouser_xattr
     symlink /system/vendor/firmware/fw_bcm4329.bin /vendor/firmware/fw_bcm4329.bin
     symlink /system/vendor/firmware/fw_bcm4329_apsta.bin /vendor/firmware/fw_bcm4329_apsta.bin
     symlink /system/vendor/firmware/bcm4329.hcd /vendor/firmware/bcm4329.hcd
@@ -133,23 +133,6 @@ service hciattach /system/bin/brcm_patchram_plus --enable_hci --enable_lpm \
     group bluetooth net_bt_admin
     disabled
 
-# for USB internet sharing
-service udhcpd /system/bin/udhcpd
-    disabled
-    oneshot
-
-service netsharing_on /system/bin/netsharing net on
-    disabled
-    oneshot
-
-service netsharing_off /system/bin/netsharing net off
-    disabled
-    oneshot
-
-service netsharing_pass /system/bin/netsharing net_pass on
-    disabled
-    oneshot
-
 service rmt_storage /system/bin/rmt_storage /dev/block/mmcblk0p13 /dev/block/mmcblk0p14
     class main
     user root
@@ -170,17 +153,6 @@ on property:ro.use_data_netmgrd=false
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  1
-
-service modem /system/xbin/wireless_modem
-	user system
-	group system
-	disabled
-
-on property:service.modem.enable=1
-	start modem
-
-on property:service.modem.enable=0
-	stop modem
 
 service dmagent /system/bin/dmagent -N -P19 -SA -VSY
     class main

@@ -9,13 +9,11 @@ PROPER=`echo $2 | sed 's/\([a-z]\)\([a-zA-Z0-9]*\)/\u\1\2/g'`
 HANDLE=TwistedZero
 KERNELSPEC=/Volumes/android/mecha-ics-mr-3.0.16
 KERNELREPO=/Users/TwistedZero/Public/Dropbox/TwistedServer/Playground/kernels
-EXTRASREPO=/Volumes/android/Playground-Ext_Pack/optional/kernel
-MECHAREPO=/Volumes/android/github-aosp_source/android_device_htc_mecha
-ICSREPO=/Volumes/android/github-aosp_source/android_system_core
-MSMREPO=/Volumes/android/github-aosp_source/android_device_htc_msm7x30-common
 zipfile=$HANDLE"_leanKernel_184Mhz.zip"
 #TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
 TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+GOOSERVER=loungekatt@upload.goo.im:public_html
+PUNCHCARD=`date "+%m-%d-%Y_%H.%M"`
 
 CPU_JOB_NUM=8
 
@@ -35,103 +33,81 @@ cd ..
 
 if [ -e arch/arm/boot/zImage ]; then
 
-cp .config arch/arm/configs/mecha_defconfig
+    cp .config arch/arm/configs/mecha_defconfig
 
-if [ "$1" == "1" ]; then
+    if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
 
-cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+        find . -name "*.ko" | xargs ${TOOLCHAIN_PREFIX}strip --strip-unneeded
 
-if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
+        if [ ! -e $KERNELOUT/system ]; then
+            mkdir $KERNELOUT/system
+        fi
+        if [ ! -e $KERNELOUT/system/lib ]; then
+            mkdir $KERNELOUT/system/lib
+        fi
+        if [ ! -e $KERNELOUT/system/lib/modules ]; then
+            mkdir $KERNELOUT/system/lib/modules
+        else
+            rm -r $KERNELOUT/system/lib/modules
+            mkdir $KERNELOUT/system/lib/modules
+        fi
 
-find . -name "*.ko" | xargs ${TOOLCHAIN_PREFIX}strip --strip-unneeded
+        for j in $(find . -name "*.ko"); do
+            cp -R "${j}" $KERNELOUT/system/lib/modules
+        done
 
-if [ ! -e $EXTRASREPO/system ]; then
-mkdir $EXTRASREPO/system
-fi
-if [ ! -e $EXTRASREPO/system/lib ]; then
-mkdir $EXTRASREPO/system/lib
-fi
-if [ ! -e $EXTRASREPO/system/lib/modules ]; then
-mkdir $EXTRASREPO/system/lib/modules
-else
-rm -r $EXTRASREPO/system/lib/modules
-mkdir $EXTRASREPO/system/lib/modules
-fi
+    else
 
-for j in $(find . -name "*.ko"); do
-cp -R "${j}" $EXTRASREPO/system/lib/modules
-done
+        if [ -e $KERNELOUT/system/lib ]; then
+            rm -r $KERNELOUT/system/lib
+        fi
 
-else
+    fi
 
-if [ -e $EXTRASREPO/system/lib ]; then
-rm -r $EXTRASREPO/system/lib
-fi
+    if [ "$1" == "1" ]; then
 
-fi
+        KERNELOUT=zip.aosp
+        KENRELZIP="leanKernel-184Mhz_$PUNCHCARD-Full.zip"
 
-cp -R arch/arm/boot/zImage mkboot.aosp
+        cp -R arch/arm/boot/zImage mkboot.aosp
 
-cd mkboot.aosp
-./img.sh
+        cd mkboot.aosp
+        ./img.sh
 
-echo "updating extras package"
-cp -R boot.img $EXTRASREPO
+        echo "building boot package"
+        cp -R boot.img ../$KERNELOUT/kernel
+        cd ../$KERNELOUT
 
-else
+        cd $KERNELOUT
+        rm *.zip
+        zip -r $zipfile *
 
-cp -R $ICSREPO/rootdir/init.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $ICSREPO/rootdir/ueventd.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/init.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MECHAREPO/kernel/ueventd.mecha.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
-cp -R $MSMREPO/init.htc7x30.usb.rc $KERNELSPEC/mkboot.aosp/boot.img-ramdisk
+        if [ -e $KERNELSPEC/$KERNELOUT/$zipfile ]; then
+            cp -R $KERNELSPEC/$KERNELOUT/$zipfile $KERNELREPO/gooserver/$KENRELZIP
+            scp -P 2222 $KERNELREPO/gooserver/$KENRELZIP  $GOOSERVER/thunderbolt
+            rm -R $KERNELREPO/gooserver/$KENRELZIP
+        fi
 
-if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
+    else
 
-find . -name "*.ko" | xargs ${TOOLCHAIN_PREFIX}strip --strip-unneeded
+        KERNELOUT=AnyKernel
+        KENRELZIP="leanKernel-184Mhz_$PUNCHCARD.zip"
 
-if [ ! -e zip.aosp/system ]; then
-mkdir zip.aosp/system
-fi
-if [ ! -e zip.aosp/system/lib ]; then
-mkdir zip.aosp/system/lib
-fi
-if [ ! -e zip.aosp/system/lib/modules ]; then
-mkdir zip.aosp/system/lib/modules
-else
-rm -r zip.aosp/system/lib/modules
-mkdir zip.aosp/system/lib/modules
-fi
+        echo "building kernel package"
+        cp -R arch/arm/boot/zImage $KERNELOUT/kernel
 
-for j in $(find . -name "*.ko"); do
-cp -R "${j}" zip.aosp/system/lib/modules
-done
+        cd $KERNELOUT
+        rm *.zip
+        zip -r $zipfile *
+        cp -R $KERNELSPEC/$KERNELOUT/$zipfile $KERNELREPO/$zipfile
 
-else
+        if [ -e $KERNELREPO/$zipfile ]; then
+            cp -R $KERNELREPO/$zipfile $KERNELREPO/gooserver/$KENRELZIP
+            scp -P 2222 $KERNELREPO/gooserver/$KENRELZIP  $GOOSERVER/thunderbolt
+            rm -R $KERNELREPO/gooserver/$KENRELZIP
+        fi
 
-if [ -e zip.aosp/system/lib ]; then
-rm -r zip.aosp/system/lib
-fi
-
-fi
-
-cp -R arch/arm/boot/zImage mkboot.aosp
-
-cd mkboot.aosp
-./img.sh
-
-echo "building kernel package"
-cp -R boot.img ../zip.aosp/kernel
-cd ../zip.aosp
-rm *.zip
-zip -r $zipfile *
-cp -R $KERNELSPEC/zip.aosp/$zipfile $KERNELREPO/$zipfile
-
-fi
+    fi
 
 fi
 
