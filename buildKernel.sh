@@ -76,9 +76,8 @@ if [ -e arch/arm/boot/zImage ]; then
 
         echo "building boot package"
         cp -R boot.img ../$KERNELOUT/kernel
-        cd ../$KERNELOUT
 
-        cd $KERNELOUT
+        cd ../$KERNELOUT
         rm *.zip
         zip -r $zipfile *
 

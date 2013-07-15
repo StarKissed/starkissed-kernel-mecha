@@ -400,6 +400,20 @@ on property:service.adb.root=1
     restart adbd
     write /sys/class/android_usb/android0/enable 1
 
+on property:persist.service.adb.enable=1
+    start adbd
+
+on property:persist.service.adb.enable=0
+    stop adbd
+
+# Adb over Network
+on property:service.adb.tcp.port=5555
+    stop adbd
+    start adbd
+on property:service.adb.tcp.port=-1
+    stop adbd
+    start adbd
+
 service servicemanager /system/bin/servicemanager
     class core
     user system
@@ -448,6 +462,10 @@ service drm /system/bin/drmserver
     class main
     user drm
     group system inet drmrpc
+
+service sysinit /system/bin/logwrapper /system/xbin/run-parts /system/etc/init.d
+    disabled
+    oneshot
 
 service media /system/bin/mediaserver
     class main
