@@ -530,7 +530,7 @@ static void dhd_set_packet_filter(int value, dhd_pub_t *dhd)
 #endif
 }
 
-extern int proximity_val;
+//extern int proximity_val;
 bool wifi_pm = false;
 module_param(wifi_pm, bool, 0755);
 
@@ -548,11 +548,12 @@ int power_mode = PM_FAST;
 	DHD_TRACE(("%s: enter, value = %d in_suspend=%d\n",
 		__FUNCTION__, value, dhd->in_suspend));
 
-	if (wifi_pm || !proximity_val) {
+//	if (wifi_pm || !proximity_val) {
+    if (wifi_pm) {
 		power_mode = PM_FAST;
-		DHD_ERROR(("%s: PM_FAST, proximity_val: %u \n", __FUNCTION__, proximity_val));
+//		DHD_ERROR(("%s: PM_FAST, proximity_val: %u \n", __FUNCTION__, proximity_val));
 	} else
-		DHD_ERROR(("%s: PM_MAX, proximity_val: %u \n", __FUNCTION__, proximity_val));
+//		DHD_ERROR(("%s: PM_MAX, proximity_val: %u \n", __FUNCTION__, proximity_val));
 	dhd_suspend_lock(dhd);
 	if (dhd && dhd->up) {
 		if (value && dhd->in_suspend) {
