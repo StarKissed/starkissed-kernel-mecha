@@ -587,13 +587,13 @@ endif # $(dot-config)
 all: vmlinux
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+KBUILD_CFLAGS  += -Os -Wno-address
 endif
 ifdef CONFIG_CC_OPTIMIZE_DEFAULT
-KBUILD_CFLAGS  += -O2
+KBUILD_CFLAGS  += -O2 -Wno-address
 endif
 ifdef CONFIG_CC_OPTIMIZE_ALOT
-KBUILD_CFLAGS  += -O3
+KBUILD_CFLAGS  += -O3 -Wno-address
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile

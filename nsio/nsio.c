@@ -502,8 +502,7 @@ static int nfhook_seq_show(struct seq_file *s, void *v)
                    lrec->ctime.tv_sec,
                    lrec->ctime.tv_nsec/1000000,
                    recno, lrec->matched,
-                   /*NIPQUAD(lrec->saddr),ntohs(lrec->sport),NIPQUAD(lrec->daddr),ntohs(lrec->dport),lrec->datalen, lrec->action, flags);*/
-                   %pI4(lrec->saddr),ntohs(lrec->sport),%pI4(lrec->daddr),ntohs(lrec->dport),lrec->datalen, lrec->action, flags);
+                   NIPQUAD(lrec->saddr),ntohs(lrec->sport),NIPQUAD(lrec->daddr),ntohs(lrec->dport),lrec->datalen, lrec->action, flags);
         if ((ret !=0)&& (recno >0)) (*rptr)--;
 
         break;

@@ -1,4 +1,7 @@
 # bcmdhd
+ifdef CONFIG_CC_OPTIMIZE_ALOT
+CFLAGS_linux_osl.o += -O2
+endif
 DHDCFLAGS = -Wall -Wstrict-prototypes -Dlinux -DBCMDRIVER                     \
 	-DBCMDONGLEHOST -DUNRELEASEDCHIP -DBCMDMA32 -DWLBTAMP -DBCMFILEIMAGE  \
 	-DDHDTHREAD -DDHD_GPL -DDHD_SCHED -DDHD_DEBUG -DSDTEST -DBDC -DTOE    \
@@ -39,6 +42,8 @@ ifneq ($(CONFIG_DHD_ENABLE_P2P),)
 DHDCFLAGS += -DWL_ENABLE_P2P_IF
 endif
 EXTRA_CFLAGS = $(DHDCFLAGS)
+CFLAGS_wl_cfgp2p.o += $(call cc-disable-warning, array-bounds)
+CFLAGS_wl_iw.o += $(call cc-disable-warning, array-bounds)
 ifeq ($(CONFIG_BCMDHD),m)
 EXTRA_LDFLAGS += --strip-debug
 endif
