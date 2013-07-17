@@ -84,7 +84,7 @@ arch/arm/boot/compressed/lib1funcs.S
 arch/arm/boot/compressed/piggy.gzip
 arch/arm/boot/compressed/vmlinux
 
-*/zImage
+zImage
 *.img
 *.zip
 
