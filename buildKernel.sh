@@ -10,8 +10,8 @@ HANDLE=TwistedZero
 KERNELSPEC=/Volumes/android/mecha-ics-mr-3.0.16
 KERNELREPO=/Users/TwistedZero/Public/Dropbox/TwistedServer/Playground/kernels
 zipfile=$HANDLE"_leanKernel_184Mhz.zip"
-#TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
-TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
+TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
+#TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 GOOSERVER=loungekatt@upload.goo.im:public_html
 PUNCHCARD=`date "+%m-%d-%Y_%H.%M"`
 
@@ -39,13 +39,13 @@ if [ -e arch/arm/boot/zImage ]; then
 
         find . -name "*.ko" | xargs ${TOOLCHAIN_PREFIX}strip --strip-unneeded
 
-        if [ ! -e $KERNELOUT/system ]; then
+        if [ ! -d $KERNELOUT/system ]; then
             mkdir $KERNELOUT/system
         fi
-        if [ ! -e $KERNELOUT/system/lib ]; then
+        if [ ! -d $KERNELOUT/system/lib ]; then
             mkdir $KERNELOUT/system/lib
         fi
-        if [ ! -e $KERNELOUT/system/lib/modules ]; then
+        if [ ! -d $KERNELOUT/system/lib/modules ]; then
             mkdir $KERNELOUT/system/lib/modules
         else
             rm -r $KERNELOUT/system/lib/modules
