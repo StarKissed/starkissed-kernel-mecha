@@ -112,7 +112,7 @@ static void microp_led_jogball_brightness_set(struct led_classdev *led_cdev,
 	spin_unlock_irqrestore(&ldata->brightness_lock, flags);
 
 	switch (brightness) {
-	case 0:
+	/*case 0:
 		data[0] = 0;
 		break;
 	case 1:
@@ -127,7 +127,7 @@ static void microp_led_jogball_brightness_set(struct led_classdev *led_cdev,
 		data[0] = 2;
 		data[1] = 0;
 		data[2] = 30;
-		break;
+		break;*/
 	default:
 		pr_warning("%s: unknown value: %d\n", __func__, brightness);
 		break;
@@ -158,7 +158,7 @@ static void microp_led_wimax_brightness_set(struct led_classdev *led_cdev,
 	spin_unlock_irqrestore(&ldata->brightness_lock, flags);
 
 	switch (brightness) {
-	case 0:
+	/*case 0:
 		data[0] = 0;
 		break;
 	case 1:
@@ -171,7 +171,7 @@ static void microp_led_wimax_brightness_set(struct led_classdev *led_cdev,
 	case 131:
 		data[0] = brightness;
 		data[1] = data[2] = 0xFF;
-		break;
+		break;*/
 	default:
 		pr_warning("%s: unknown value: %d\n", __func__, brightness);
 		break;
