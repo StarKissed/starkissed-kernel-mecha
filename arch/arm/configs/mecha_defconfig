@@ -1,6 +1,6 @@
 #
 # Automatically generated make config: don't edit
-# Linux/arm 3.0.63 Kernel Configuration
+# Linux/arm 3.0.86 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_SYS_SUPPORTS_APM_EMULATION=y
@@ -2576,7 +2576,6 @@ CONFIG_EXT4_FS_XATTR=y
 # CONFIG_EXT4_FS_POSIX_ACL is not set
 # CONFIG_EXT4_FS_SECURITY is not set
 # CONFIG_EXT4_DEBUG is not set
-CONFIG_EXT4_E2FSCK_RECOVER=y
 CONFIG_JBD=y
 # CONFIG_JBD_DEBUG is not set
 CONFIG_JBD2=y
