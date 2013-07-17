@@ -35,6 +35,12 @@ if [ -e arch/arm/boot/zImage ]; then
 
     cp .config arch/arm/configs/mecha_defconfig
 
+if [ "$1" == "1" ]; then
+    KERNELOUT=zip.aosp
+else
+    KERNELOUT=AnyKernel
+fi
+
     if [ `find . -name "*.ko" | grep -c ko` > 0 ]; then
 
         find . -name "*.ko" | xargs ${TOOLCHAIN_PREFIX}strip --strip-unneeded
@@ -66,7 +72,6 @@ if [ -e arch/arm/boot/zImage ]; then
 
     if [ "$1" == "1" ]; then
 
-        KERNELOUT=zip.aosp
         KENRELZIP="leanKernel-184Mhz_$PUNCHCARD-Full.zip"
 
         cp -R arch/arm/boot/zImage mkboot.aosp
@@ -89,7 +94,6 @@ if [ -e arch/arm/boot/zImage ]; then
 
     else
 
-        KERNELOUT=AnyKernel
         KENRELZIP="leanKernel-184Mhz_$PUNCHCARD.zip"
 
         echo "building kernel package"
