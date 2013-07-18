@@ -9,7 +9,6 @@ PROPER=`echo $2 | sed 's/\([a-z]\)\([a-zA-Z0-9]*\)/\u\1\2/g'`
 HANDLE=TwistedZero
 KERNELSPEC=/Volumes/android/mecha-ics-mr-3.0.16
 KERNELREPO=/Users/TwistedZero/Public/Dropbox/TwistedServer/Playground/kernels
-zipfile=$HANDLE"_leanKernel_184Mhz.zip"
 TOOLCHAIN_PREFIX=/Volumes/android/android-toolchain-eabi/bin/arm-eabi-
 #TOOLCHAIN_PREFIX=/Volumes/android/android-tzb_ics4.0.1/prebuilt/darwin-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-
 GOOSERVER=loungekatt@upload.goo.im:public_html
@@ -72,7 +71,8 @@ fi
 
     if [ "$1" == "1" ]; then
 
-        KENRELZIP="leanKernel-184Mhz_$PUNCHCARD-Full.zip"
+        zipfile=$HANDLE"_StarKissed_184Mhz-Full.zip"
+        KENRELZIP="StarKissed-184Mhz_$PUNCHCARD-Full.zip"
 
         cp -R arch/arm/boot/zImage mkboot.aosp
 
@@ -83,33 +83,27 @@ fi
         cp -R boot.img ../$KERNELOUT/kernel
 
         cd ../$KERNELOUT
-        rm *.zip
-        zip -r $zipfile *
-
-        if [ -e $KERNELSPEC/$KERNELOUT/$zipfile ]; then
-            cp -R $KERNELSPEC/$KERNELOUT/$zipfile $KERNELREPO/gooserver/$KENRELZIP
-            scp -P 2222 $KERNELREPO/gooserver/$KENRELZIP  $GOOSERVER/thunderbolt
-            rm -R $KERNELREPO/gooserver/$KENRELZIP
-        fi
 
     else
 
-        KENRELZIP="leanKernel-184Mhz_$PUNCHCARD.zip"
+        zipfile=$HANDLE"_StarKissed_184Mhz-Core.zip"
+        KENRELZIP="StarKissed-184Mhz_$PUNCHCARD-Core.zip"
 
         echo "building kernel package"
         cp -R arch/arm/boot/zImage $KERNELOUT/kernel
 
         cd $KERNELOUT
-        rm *.zip
-        zip -r $zipfile *
-        cp -R $KERNELSPEC/$KERNELOUT/$zipfile $KERNELREPO/$zipfile
 
-        if [ -e $KERNELREPO/$zipfile ]; then
-            cp -R $KERNELREPO/$zipfile $KERNELREPO/gooserver/$KENRELZIP
-            scp -P 2222 $KERNELREPO/gooserver/$KENRELZIP  $GOOSERVER/thunderbolt
-            rm -R $KERNELREPO/gooserver/$KENRELZIP
-        fi
+    fi
 
+    rm *.zip
+    zip -r $zipfile *
+    cp -R $KERNELSPEC/$KERNELOUT/$zipfile $KERNELREPO/$zipfile
+
+    if [ -e $KERNELREPO/$zipfile ]; then
+        cp -R $KERNELREPO/$zipfile $KERNELREPO/gooserver/$KENRELZIP
+        scp -P 2222 $KERNELREPO/gooserver/$KENRELZIP  $GOOSERVER/thunderbolt
+        rm -R $KERNELREPO/gooserver/$KENRELZIP
     fi
 
 fi
