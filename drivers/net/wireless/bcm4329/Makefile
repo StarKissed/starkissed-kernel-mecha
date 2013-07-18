@@ -1,4 +1,7 @@
 # bcm4329
+ifdef CONFIG_CC_OPTIMIZE_ALOT
+CFLAGS_linux_osl.o += -O2
+endif
 DHDCFLAGS = -DLINUX -DBCMDRIVER -DBCMDONGLEHOST -DDHDTHREAD -DBCMWPA2         \
 	-DUNRELEASEDCHIP -Dlinux -DDHD_SDALIGN=64 -DMAX_HDR_READ=64           \
 	-DDHD_FIRSTREAD=64 -DDHD_GPL -DDHD_SCHED -DBDC -DTOE -DDHD_BCMEVENTS  \
@@ -18,4 +21,5 @@ DHDOFILES = dhd_linux.o linux_osl.o bcmutils.o dhd_common.o dhd_custom_gpio.o \
 obj-$(CONFIG_BCM4329) += bcm4329.o
 bcm4329-objs += $(DHDOFILES)
 EXTRA_CFLAGS = $(DHDCFLAGS)
+CFLAGS_wl_iw.o += $(call cc-disable-warning, array-bounds)
 EXTRA_LDFLAGS += --strip-debug
