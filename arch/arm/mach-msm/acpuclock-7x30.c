@@ -58,6 +58,8 @@
 #define MAX_UV_MV 1475
 
 #define MAX_AXI_KHZ 192000
+#define ACPU_MIN_UV_MV 700U
+#define ACPU_MAX_UV_MV 1300U
 
 struct clock_state {
 struct clkctl_acpu_speed	*current_speed;
@@ -171,11 +173,15 @@ ret = vreg_set_level(vreg, s->vdd_mv);
 ret = msm_spm_set_vdd(0, s->vdd_raw);
 #endif
 
-if (ret)
-printk(KERN_ERR "%s: failed, vdd_mv=%d, ret=%d\n",
-__func__, s->vdd_mv, ret);
-else /* Wait for voltage to stabilize. */
-udelay(62);
+	if (ret)
+		printk(KERN_ERR "%s: failed, vdd_mv=%d, ret=%d\n",
+				__func__, s->vdd_mv, ret);
+	else /* Wait for voltage to stabilize. */
+		udelay(62);
+#ifdef CONFIG_ACPUCLOCK_OVERCLOCKING
+	if (!ret)
+		return 0;
+#endif
 
 #ifdef CONFIG_ACPUCLOCK_OVERCLOCKING
 if (!ret)
@@ -543,42 +549,37 @@ return 0;
 struct acpuclk_soc_data acpuclk_7x30_soc_data __initdata = {
 .init = acpuclk_7x30_init,
 };
-
 #ifdef CONFIG_CPU_FREQ_VDD_LEVELS
-
-ssize_t acpuclk_get_vdd_levels_str(char *buf)
-{
-    int i, len = 0;
-    if (buf)
-    {
-        mutex_lock(&drv_state.lock);
-        for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
-        {
-            len += sprintf(buf + len, "%8u: %4d\n", acpu_freq_tbl[i].acpu_clk_khz, acpu_freq_tbl[i].vdd_mv);
-        }
-        mutex_unlock(&drv_state.lock);
-    }
-    return len;
-}
-
+	ssize_t acpuclk_get_vdd_levels_str(char *buf)
+	{
+	int i, len = 0;
+	if (buf)
+	{
+		mutex_lock(&drv_state.lock);
+	for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
+	{
+		len += sprintf(buf + len, "%8u: %4d\n", acpu_freq_tbl[i].acpu_clk_khz, acpu_freq_tbl[i].vdd_mv);
+	}
+		mutex_unlock(&drv_state.lock);
+	}
+	return len;
+	}
 void acpuclk_set_vdd(unsigned int khz, int vdd)
-{
-    int i;
-    unsigned int new_vdd;
-    // wtf  vdd = vdd / V_STEP * V_STEP;
-    mutex_lock(&drv_state.lock);
-    for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
-    {
-        if (khz == 0)
-            new_vdd = min(max((acpu_freq_tbl[i].vdd_mv + (unsigned int)vdd), (unsigned int)MIN_UV_MV), (unsigned int)MAX_UV_MV);
-        else if (acpu_freq_tbl[i].acpu_clk_khz == khz)
-            new_vdd = min(max((unsigned int)vdd, (unsigned int)MIN_UV_MV), (unsigned int)MAX_UV_MV);
-        else continue;
-        
-        acpu_freq_tbl[i].vdd_mv = new_vdd;
-        acpu_freq_tbl[i].vdd_raw = VDD_RAW(new_vdd);
-    }
-    mutex_unlock(&drv_state.lock);
-}
-
+	{
+int i;
+unsigned int new_vdd;
+		vdd = vdd / V_STEP * V_STEP;
+		mutex_lock(&drv_state.lock);
+	for (i = 0; acpu_freq_tbl[i].acpu_clk_khz; i++)
+	{
+	if (khz == 0)
+		new_vdd = min(max((acpu_freq_tbl[i].vdd_mv + vdd), ACPU_MIN_UV_MV), ACPU_MAX_UV_MV);
+	else if (acpu_freq_tbl[i].acpu_clk_khz == khz)
+		new_vdd = min(max((unsigned int)vdd, ACPU_MIN_UV_MV), ACPU_MAX_UV_MV);
+	else continue;
+		acpu_freq_tbl[i].vdd_mv = new_vdd;
+		acpu_freq_tbl[i].vdd_raw = VDD_RAW(new_vdd);
+	}
+		mutex_unlock(&drv_state.lock);
+	}
 #endif
