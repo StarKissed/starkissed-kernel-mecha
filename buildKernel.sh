@@ -18,10 +18,17 @@ CPU_JOB_NUM=8
 
 cp -R config/$2_config .config
 
-make clean -j$CPU_JOB_NUM
-if [ -e arch/arm/boot/zImage ]; then
-    rm arch/arm/boot/zImage
+if [ -e $KERNELSPEC/mkboot.aosp/boot.img ]; then
+    rm -R $KERNELSPEC/mkboot.aosp/boot.img
 fi
+if [ -e $KERNELSPEC/mkboot.aosp/newramdisk.cpio.gz ]; then
+    rm -R $KERNELSPEC/mkboot.aosp/newramdisk.cpio.gz
+fi
+if [ -e $KERNELSPEC/mkboot.aosp/zImage ]; then
+    rm -R $KERNELSPEC/mkboot.aosp/zImage
+fi
+
+make clean -j$CPU_JOB_NUM
 
 make -j$CPU_JOB_NUM ARCH=arm CROSS_COMPILE=$TOOLCHAIN_PREFIX
 
