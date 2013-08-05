@@ -20,7 +20,7 @@
  *      Notwithstanding the above, under no circumstances may you combine this
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
- * $Id: bcmutils.c 275693 2011-08-04 19:59:34Z $
+ * $Id: bcmutils.c,v 1.277.2.18 2011-01-26 02:32:08 $
  */
 
 #include <typedefs.h>
@@ -288,13 +288,13 @@ pktq_pflush(osl_t *osh, struct pktq *pq, int prec, bool dir, ifpkt_cb_t fn, int 
 				q->head = PKTLINK(p);
 			else {
 #ifdef HTC_KlocWork
-				if(!prev) {
-					printf("[HTCKW] pktq_pflush: prev=NULL\n");
-					return;
-				}
+                if(!prev) {
+                    printf("[HTCKW] pktq_pflush: prev=NULL\n");
+                    return;
+                }
 #endif
-				PKTSETLINK(prev, PKTLINK(p));
-			}
+                PKTSETLINK(prev, PKTLINK(p));
+            }
 			PKTSETLINK(p, NULL);
 			PKTFREE(osh, p, dir);
 			q->len--;
@@ -509,7 +509,7 @@ pktq_mdeq(struct pktq *pq, uint prec_bmp, int *prec_out)
 
 #ifdef HTC_KlocWork
     while (pq->hi_prec >= PKTQ_MAX_PREC)
-		pq->hi_prec--;
+        pq->hi_prec--;
 #endif
 
 	while ((prec = pq->hi_prec) > 0 && pq->q[prec].head == NULL)
@@ -994,12 +994,16 @@ pktsetprio(void *pkt, bool update_vtag)
 		rc |= PKTPRIO_DSCP;
 	}
 
+	/* workaround for broken AC video queue on BCM4330:
+	 * downgrade video priority to best effort */
+	if (priority == 4 || priority == 5)
+		priority = 3;
+
 	ASSERT(priority >= 0 && priority <= MAXPRIO);
 	PKTSETPRIO(pkt, priority);
 	return (rc | priority);
 }
 
-#ifndef BCM_BOOTLOADER
 
 static char bcm_undeferrstr[32];
 static const char *bcmerrorstrtable[] = BCMERRSTRINGTABLE;
@@ -1021,7 +1025,6 @@ bcmerrorstr(int bcmerror)
 	return bcmerrorstrtable[-bcmerror];
 }
 
-#endif /* !BCM_BOOTLOADER */
 
 
 
@@ -1604,9 +1607,6 @@ static const char *crypto_algo_names[] = {
 	"UNDEF",
 	"UNDEF",
 	"UNDEF",
-#ifdef BCMWAPI_WPI
-	"WAPI",
-#endif /* BCMWAPI_WPI */
 	"UNDEF"
 };
 

@@ -22,7 +22,7 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
- * $Id: sbutils.c 275693 2011-08-04 19:59:34Z $
+ * $Id: sbutils.c,v 1.687.2.1 2010-11-29 20:21:56 Exp $
  */
 
 #include <typedefs.h>
@@ -432,6 +432,7 @@ sb_corereg(si_t *sih, uint coreidx, uint regoff, uint mask, uint val)
         return 0;
     }
 #endif
+
 	/* mask and set */
 	if (mask || val) {
 		if (regoff >= SBCONFIGOFF) {
@@ -514,12 +515,11 @@ _sb_scan(si_info_t *sii, uint32 sba, void *regs, uint bus, uint32 sbba, uint num
 			/* determine numcores - this is the total # cores in the chip */
 			if (((ccrev == 4) || (ccrev >= 6))){
 #ifdef HTC_KlocWork
-				if(cc != NULL)
+                if(cc != NULL)
 #endif
 				numcores = (R_REG(sii->osh, &cc->chipid) & CID_CC_MASK) >>
 				        CID_CC_SHIFT;
-			}
-			else {
+			} else {
 				/* Older chips */
 				uint chip = CHIPID(sii->pub.chip);
 
